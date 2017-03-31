@@ -52,7 +52,7 @@ public class MealServlet extends HttpServlet {
         } else if (action.equals("insert")) {
             request.getRequestDispatcher("/meal.jsp").forward(request, response);
         } else{
-            List<MealWithExceed> result = MealsUtil.getFilteredWithExceeded(repository.getAll(), LocalTime.MIN, LocalTime.MAX, 200);
+            List<MealWithExceed> result = MealsUtil.getFilteredWithExceeded(repository.getAll(), LocalTime.MIN, LocalTime.MAX, 2000);
             request.setAttribute("meals", result);
             request.getRequestDispatcher("/meals.jsp").forward(request, response);
         }
