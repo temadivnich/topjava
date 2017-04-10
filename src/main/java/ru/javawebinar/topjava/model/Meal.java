@@ -8,32 +8,25 @@ import java.time.LocalTime;
  * GKislin
  * 11.01.2015.
  */
-public class Meal {
-    private Integer id;
-
+public class Meal extends BaseEntity {
     private final LocalDateTime dateTime;
 
     private final String description;
 
     private final int calories;
 
-    public Meal(LocalDateTime dateTime, String description, int calories) {
-        this(null, dateTime, description, calories);
+    private User user;
+
+    public Meal(LocalDateTime dateTime, String description, int calories, User user) {
+        this(null, dateTime, description, calories, user);
     }
 
-    public Meal(Integer id, LocalDateTime dateTime, String description, int calories) {
+    public Meal(Integer id, LocalDateTime dateTime, String description, int calories, User user) {
         this.id = id;
         this.dateTime = dateTime;
         this.description = description;
         this.calories = calories;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
+        this.user = user;
     }
 
     public LocalDateTime getDateTime() {
@@ -48,16 +41,20 @@ public class Meal {
         return calories;
     }
 
+    public void setUser(User u) {
+        this.user = u;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
     public LocalDate getDate() {
         return dateTime.toLocalDate();
     }
 
     public LocalTime getTime() {
         return dateTime.toLocalTime();
-    }
-
-    public boolean isNew() {
-        return id == null;
     }
 
     @Override

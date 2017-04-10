@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.EnumSet;
 import java.util.Set;
 
-import static ru.javawebinar.topjava.util.MealsUtil.DEFAULT_CALORIES_PER_DAY;
+import static ru.javawebinar.topjava.util.UserMealsUtil.DEFAULT_CALORIES_PER_DAY;
 
 public class User extends NamedEntity {
 
@@ -21,6 +21,10 @@ public class User extends NamedEntity {
     private int caloriesPerDay = DEFAULT_CALORIES_PER_DAY;
 
     public User() {
+    }
+
+    public User(String name, String email, String password, Role role, Role... roles) {
+        this(null, name, email, password, DEFAULT_CALORIES_PER_DAY, true, EnumSet.of(role, roles));
     }
 
     public User(Integer id, String name, String email, String password, Role role, Role... roles) {
