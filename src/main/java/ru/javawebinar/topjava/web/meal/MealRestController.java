@@ -27,7 +27,8 @@ public class MealRestController {
     @Autowired
     private MealService service;
 
-    public Meal create(Meal meal) {;
+    public Meal create(Meal meal) {
+        ;
         checkNew(meal);
         return service.save(meal, AuthorizedUser.id());
     }
@@ -48,34 +49,20 @@ public class MealRestController {
 
     //Deprecated
     public List<MealWithExceed> getAll() {
-        return UserMealsUtil.getWithExceeded(service.getAll(AuthorizedUser.id()),UserMealsUtil.DEFAULT_CALORIES_PER_DAY);
+        return UserMealsUtil.getWithExceeded(service.getAll(AuthorizedUser.id()), UserMealsUtil.DEFAULT_CALORIES_PER_DAY);
     }
 
-    public List<MealWithExceed> getByFilter(HttpServletRequest request) {
+    public List<MealWithExceed> getByFilter(LocalDate startDate,
+                                            LocalDate endDate,
+                                            LocalTime startTime,
+                                            LocalTime endTime) {
         LOG.info("getByFilter for userId=" + AuthorizedUser.id());
         return UserMealsUtil.getFilteredWithExceeded(
-                    service.getAll(AuthorizedUser.id()),
-                    putAndGetLocalDateParam("startDate", LocalDate.MIN, request),
-                    putAndGetLocalDateParam("endDate", LocalDate.MAX, request),
-                    putAndGetLocalTimeParam("startTime", LocalTime.MIN, request),
-                    putAndGetLocalTimeParam("endTime", LocalTime.MAX, request),
-                    UserMealsUtil.DEFAULT_CALORIES_PER_DAY);
-    }
-    private static LocalDate putAndGetLocalDateParam(String param, LocalDate ld, HttpServletRequest request) {
-        String value = request.getParameter(param);
-        if (!Strings.isNullOrEmpty(value)) {
-            ld = DateTimeUtil.parseLocalDate(value);
-            request.setAttribute(param, ld);
-        }
-        return ld;
-    }
-
-    private static LocalTime putAndGetLocalTimeParam(String param, LocalTime lt, HttpServletRequest request) {
-        String value = request.getParameter(param);
-        if (!Strings.isNullOrEmpty(value)) {
-            lt = DateTimeUtil.parseLocalTime(value);
-            request.setAttribute(param, lt);
-        }
-        return lt;
+                service.getAll(AuthorizedUser.id()),
+                                startDate,
+                                endDate,
+                                startTime,
+                                endTime,
+                                UserMealsUtil.DEFAULT_CALORIES_PER_DAY);
     }
 }

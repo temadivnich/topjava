@@ -97,10 +97,31 @@ public class MealServlet extends HttpServlet {
             case "all":
             default:
                 LOG.info("getByFilter");
-                request.setAttribute("meals", mealRestController.getByFilter(request));
+                request.setAttribute("meals", mealRestController.getByFilter(
+                        putAndGetLocalDateParam("startDate", LocalDate.MIN, request),
+                        putAndGetLocalDateParam("endDate", LocalDate.MAX, request),
+                        putAndGetLocalTimeParam("startTime", LocalTime.MIN, request),
+                        putAndGetLocalTimeParam("endTime", LocalTime.MAX, request)));
                 request.getRequestDispatcher("/meals.jsp").forward(request, response);
                 break;
         }
+    }
+    private static LocalDate putAndGetLocalDateParam(String param, LocalDate ld, HttpServletRequest request) {
+        String value = request.getParameter(param);
+        if (!Strings.isNullOrEmpty(value)) {
+            ld = DateTimeUtil.parseLocalDate(value);
+            request.setAttribute(param, ld);
+        }
+        return ld;
+    }
+
+    private static LocalTime putAndGetLocalTimeParam(String param, LocalTime lt, HttpServletRequest request) {
+        String value = request.getParameter(param);
+        if (!Strings.isNullOrEmpty(value)) {
+            lt = DateTimeUtil.parseLocalTime(value);
+            request.setAttribute(param, lt);
+        }
+        return lt;
     }
 
     private int getId(HttpServletRequest request) {
