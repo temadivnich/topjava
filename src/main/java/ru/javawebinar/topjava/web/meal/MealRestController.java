@@ -46,8 +46,9 @@ public class MealRestController {
         return service.get(id, AuthorizedUser.id());
     }
 
-    public List<Meal> getAll() {
-        return service.getAll(AuthorizedUser.id());
+    //Deprecated
+    public List<MealWithExceed> getAll() {
+        return UserMealsUtil.getWithExceeded(service.getAll(AuthorizedUser.id()),UserMealsUtil.DEFAULT_CALORIES_PER_DAY);
     }
 
     public List<MealWithExceed> getByFilter(HttpServletRequest request) {
