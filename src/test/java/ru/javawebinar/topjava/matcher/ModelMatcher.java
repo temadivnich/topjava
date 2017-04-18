@@ -3,12 +3,13 @@ package ru.javawebinar.topjava.matcher;
 import org.junit.Assert;
 
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
 /**
  * This test Matcher assert equality of beans and collections
- *
+ * <p>
  * It wrap every entity by Wrapper before apply to Assert.assertEquals
  * in order to compare them by custom comparator.
  * Default comparator is String.valueOf(entity)
@@ -16,17 +17,22 @@ import java.util.stream.Collectors;
  * @param <T> : Entity
  */
 public class ModelMatcher<T> {
-    public interface Comparator<T> {
-        boolean compare(T expected, T actual);
-    }
+//    public interface Comparator<T> {
+//        boolean compare(T expected, T actual);
+//    }
 
-    private static final Comparator DEFAULT_COMPARATOR =
-            (Object expected, Object actual) -> expected == actual || String.valueOf(expected).equals(String.valueOf(actual));
+//    private static final Comparator DEFAULT_COMPARATOR =
+//            (Object expected, Object actual) -> expected == actual || String.valueOf(expected).equals(String.valueOf(actual));
 
     private Comparator<T> comparator;
 
+//    public ModelMatcher() {
+//        this((Comparator<T>) DEFAULT_COMPARATOR);
+//    }
+
     public ModelMatcher() {
-        this((Comparator<T>) DEFAULT_COMPARATOR);
+        this((T expected, T actual) ->
+                expected == actual ? 0 : String.valueOf(expected).compareTo(String.valueOf(actual)));
     }
 
     public ModelMatcher(Comparator<T> comparator) {
@@ -45,7 +51,8 @@ public class ModelMatcher<T> {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
             Wrapper that = (Wrapper) o;
-            return entity != null ? comparator.compare(entity, that.entity) : that.entity == null;
+//            return entity != null ? comparator.compare(entity, that.entity) : that.entity == null;
+            return entity != null ? (comparator.compare(entity, that.entity) == 0) : that.entity == null;
         }
 
         @Override
